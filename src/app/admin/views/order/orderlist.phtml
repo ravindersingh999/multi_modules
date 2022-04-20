@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Orders List</h2>
+    <div>
+        <div>
+            <h4>Filter:</h4>
+            <div class="row">
+                <form action="/order/orderlist" method="POST">
+                    <div class="col-2">
+                        <select name="filter_status" id="filter_status" onchange="this.form.submit()">
+                            <option value="choose">Choose By Status</option>
+                            <option value="paid">Paid</option>
+                            <option value="processing">Processing</option>
+                            <option value="dispatched">Dispatched</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="refunded">Refunded</option>
+                        </select>
+
+                    </div>
+
+                    <div class="col-2">
+                        <select name="filter_date" onchange="this.form.submit()">
+                            <option value="choose">Choose By Date</option>
+                            <option value="today">Today</option>
+                            <option value="this_week">This Week</option>
+                            <option value="this_month">This Month</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="ml-3">
+                        <?php if (isset($html)) {
+                            echo $html; ?>
+                            <input type="submit" name="custom" class="btn btn-primary mt-1" value="Check Orders">
+                        <?php } ?>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="mt-2">
+            <table>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Customer Name</th>
+                    <th>Product Quantity</th>
+                    <th>Order Date</th>
+                    <th>Order Status</th>
+                    <th>Change Status</th>
+                </tr>
+
+                <tbody>
+                    <?php
+                    $html = "";
+                    foreach ($order as $k => $v) {
+                        $html .= '<tr>
+                        <td>' . $v->product_name . '</td>
+                        <td>' . $v->customer_name . '</td>
+                        <td>' . $v->product_quantity . '</td>
+                        <td>' . $v->order_date . '</td>
+                        <td>' . $v->order_status . '</td>
+                        <td><form action="/order/orderlist" method="POST">
+                        <input type="hidden" name="order_id" value=' . $v->_id . '>
+                        <select name="status" id="status" onchange="this.form.submit()">
+                        <option value="choose">Choose</option>
+                          <option value="paid">Paid</option>
+                          <option value="processing">Processing</option>
+                          <option value="dispatched">Dispatched</option>
+                          <option value="shipped">Shipped</option>
+                          <option value="refunded">Refunded</option>
+                        </select>
+                        </form>
+                        </td>
+                        </tr>';
+                    }
+                    echo $html;
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

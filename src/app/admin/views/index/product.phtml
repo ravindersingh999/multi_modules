@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.88.1">
+
+  <title>Dashboard Template · Bootstrap v5.1</title>
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/dashboard/">
+  <!-- Bootstrap core CSS -->
+  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .box {
+      width: 40%;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 35px;
+      border: 2px solid #fff;
+      border-radius: 20px/50px;
+      background-clip: padding-box;
+      text-align: center;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 500ms;
+      visibility: hidden;
+      opacity: 0;
+    }
+
+    .overlay:target {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .popup {
+      margin: 70px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 5px;
+      width: 30%;
+      position: relative;
+      transition: all 5s ease-in-out;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+      color: #333;
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    .popup .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      transition: all 200ms;
+      font-size: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .popup .close:hover {
+      color: #06D85F;
+    }
+
+    .popup .content {
+      max-height: 30%;
+      overflow: auto;
+    }
+
+    @media screen and (max-width: 700px) {
+      .box {
+        width: 70%;
+      }
+
+      .popup {
+        width: 70%;
+      }
+    }
+  </style>
+
+
+  <!-- Custom styles for this template -->
+  <link href="./assets/css/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-nav">
+      <div class="nav-item text-nowrap">
+        <a class="nav-link px-3" href="loginF.php">Sign out</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="position-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/index/addproduct">
+                <span data-feather="home"></span>
+                Add Product
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <h2>Products</h2>
+
+        <div>
+          <form action="/index/product" method="POST">
+            <input type="text" name="name">
+            <input type="submit" name="search" value="Search">
+          </form>
+        </div><br>
+        <div class="table-responsive">
+          <table class="table table-striped table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Price</th>
+                <th scope="col">Stock</th>
+                <th scope="col">View</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              if (isset($product)) {
+                $html = "";
+                foreach ($product as $k => $v) {
+                  $html .=  "<form action='/index/productaction' method='POST'><tr><td>" . $v->product_name . "</td>
+                            <td>" . $v->product_category . "</td>
+                            <td>" . $v->product_price . "</td>
+                            <td>" . $v->product_stock . "</td>
+                            <td><a class='btn btn-success' href='#" . $v->_id . "'>Quick view</a></td>
+                            <td>
+                            <input type='hidden' name='delval' value=" . $v->_id . ">
+                            <input type='submit' name='delete' value='Delete' class='btn btn-danger'>
+                            <input type='submit' name='edit' value='Edit' class='btn btn-primary'>
+                            </td>      
+                            </tr></form>"; ?>
+                  <div id="<?php echo $v->_id; ?>" class="overlay">
+                    <div class="popup">
+                      <h3 class="text-center"><?php echo $v->product_name; ?></h3><br>
+                      <a class="close" href="#">&times;</a>
+                      <div class="content">
+                        <h5>Additional Fields</h5>
+                        <?php if ($v->additional) {
+                          foreach ($v->additional as $k2 => $v2) {
+                            echo $k2 . ' : ' . $v2 . '<br>';
+                          }
+                        } ?>
+                      </div>
+                    </div>
+                  </div>
+                <?php }
+              } else {
+                $html = "";
+                foreach ($list as $k => $v) {
+                  $html .=  "<form action='/index/productaction' method='POST'><tr><td>" . $v->product_name . "</td>
+                              <td>" . $v->product_category . "</td>
+                              <td>" . $v->product_price . "</td>
+                              <td>" . $v->product_stock . "</td>
+                              <td><a class='btn btn-success' href='#" . $v->_id . "'>Quick view</a></td>
+                              <td><input type='hidden' name='delval' value=" . $v->_id . ">
+                              <input type='submit' name='delete' value='Delete' class='btn btn-danger'>
+                              <input type='submit' name='edit' value='Edit' class='btn btn-primary'>
+                              </td>      
+                              </tr></form>"; ?>
+
+                  <div id="<?php echo $v->_id; ?>" class="overlay">
+                    <div class="popup">
+                      <h3 class="text-center"><?php echo $v->product_name; ?></h3><br>
+                      <a class="close" href="#">&times;</a>
+                      <div class="content">
+                        <h5>Additional Fields</h5>
+                        <?php if ($v->additional) {
+                          foreach ($v->additional as $k2 => $v2) {
+                            echo $k2 . ' : ' . $v2 . '<br>';
+                          }
+                        } ?>
+                      </div>
+                    </div>
+                  </div>
+              <?php }
+              }
+              echo $html;
+              ?>
+
+            </tbody>
+
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="text-center">
+            <h2>Place Order</h2>
+        </div>
+        <br>
+        <form action="/order/index" method="POST">
+            <div class="border">
+                <label for="product" class="mt-2 ml-2">Choose Product :</label>
+
+                <select name="product_name" id="product_name">
+                    <option value="">Choose Product</option>
+                    <?php foreach ($product as $k => $v) { ?>
+                        <option value="<?php echo $v->product_name ?>"><?php echo $v->product_name ?></option>
+                    <?php } ?>
+                </select>
+                <br>
+                <label for="customer_name" class="mt-4 ml-2">Customer Name:</label>
+                <input type="text" name="customer_name">
+                <br>
+                <label for="product_quantity" class="mt-4 ml-2">Product Quantity:</label>
+                <input type="text" name="product_quantity">
+                <br><br>
+                <input type="submit" name="placeorder" class="btn btn-success mb-2 ml-2">
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
